@@ -1,0 +1,46 @@
+
+function jq-front() {
+  docker run --rm -i \
+    -v "${HOME}:/var/lib/jf/${HOME}" \
+    -v "${HOME}/.jq-front.rc:/root/.jq-front.rc" \
+    -e JF_PATH_BASE="/var/lib/jf" \
+    -e JF_PATH="${JF_PATH}" \
+    -e JF_DEBUG=${JF_DEBUG:-disabled} \
+    -e JF_CWD="$(pwd)" \
+    dakusui/jq-front:"${JF_DOCKER_TAG:-v0.55}" "${@}"
+}
+
+function define_JF_PATH() {
+  local _project_root_dir="${1}"
+  JF_PATH="${_project_root_dir}/src/lib/mmml/json++:${JF_PATH}"
+  JF_PATH="${_project_root_dir}/target/mmml:${JF_PATH}"
+  export JF_PATH
+}
+
+function symfonion() {
+  local _project_root_dir="${1}"
+  shift
+  java -jar "${_project_root_dir}/tools/bin/symfonion-"*".jar" "${@}"
+}
+
+function clean_resources() {
+  local _project_root_dir="${1}"
+  rm -fr "${_project_root_dir}/target/mmml"
+}
+
+function copy_resources() {
+  local _project_root_dir="${1}"
+  mkdir -p "${_project_root_dir}/target/mmml"
+  cp -r "${_project_root_dir}/src/main/mmml"/* "${_project_root_dir}/target/mmml"/
+}
+
+function preprocess_song() {
+  local _project_root_dir="${1}"
+  define_JF_PATH "${_project_root_dir}"
+  jq-front "${_project_root_dir}/target/mmml/song.json++" > "${_project_root_dir}/target/mmml/song.json"
+}
+
+function compile_song() {
+  local _project_root_dir="${1}"
+  symfonion "${_project_root_dir}" --compile "${_project_root_dir}/target/mmml/song.json" -o "${_project_root_dir}/target/mmml/song.midi"
+}
