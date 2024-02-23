@@ -1,13 +1,22 @@
 {
-  "$extends": [ "helpers/symfonion.rc;SOURCE" ],
+  "$extends": [
+    "helpers/symfonion.rc;SOURCE"
+  ],
+  "$base": {
+    "$notemaps": {},
+    "$patterns": {
+    }
+  },
   "$song": {
     "$notemaps": {},
     "$patterns": {}
   },
-  "$settings": { "$mididevice": "jv" },
-  "$parts": "$eval:object:$(compose_parts_section '.$song.$parts' '.$song.$devices')",
+  "$settings": {
+    "$mididevice": "examples/jv"
+  },
+  "$parts": "eval:object:$(compose_parts_section '.$song.$parts' '.$song.$devices')",
   "$notemaps": "eval:object:$(ref '.$song.$notemaps')",
   "$grooves": "eval:object:$(ref '.$song.$grooves')",
-  "$patterns": "eval:object:$(object_merge '.$song.$patterns' '.$auto.patterns')",
-  "$sequence": "eval:array:$(array_append '.$auto.$sequence' '.$song.$sequence')"
+  "$patterns": "eval:object:$(object_merge '.$song.$patterns' '.$base.$patterns')",
+  "$sequence": "eval:array:$(array_append '.$song.$sequence' '.$base.$sequence')"
 }
