@@ -1,8 +1,8 @@
 {
-  "$extends" : [ "deviceType-helper.sh;SOURCE" ]
+  "$extends" : [ "helpers/deviceType-helper.rc;SOURCE" ],
   "__device_name__" : "eval:string:$(device_name)",
-  "import": [],
-  "initialize": {
+  "$import": [],
+  "$initialize": {
     "device": {
       "description": "This defines a procedure to initialize a General MIDI-1 level device, which requires nothing.",
       "procedure": []
@@ -12,7 +12,7 @@
       "procedure": []
     }
   },
-  "waves": {
+  "$voices": {
     "piano": { "$program": 0, "$bank": 0.0 },
     "chromaticPercussion": { "$program": 8, "$bank": 0.0 },
     "organ": { "$program": 16, "$bank": 0.0 },
@@ -42,6 +42,6 @@
     "soundEffectTelephoneRing": { "$program": 124, "$bank": 0.0 },
     "soundEffectHelicoptor": { "$program": 125, "$bank": 0.0 },
     "soundEffectApplause": { "$program": 126, "$bank": 0.0 },
-    "soundEffectGunshot": { "$program": 127, "$bank": 0.0 },
+    "soundEffectGunshot": { "$program": 127, "$bank": 0.0 }
   }
 }

@@ -42,5 +42,5 @@ function preprocess_song() {
 
 function compile_song() {
   local _project_root_dir="${1}"
-  symfonion "${_project_root_dir}" --compile "${_project_root_dir}/target/mmml/song.json" -o "${_project_root_dir}/target/mmml/song.midi"
+  symfonion "${_project_root_dir}" -c "${_project_root_dir}/target/mmml/song.json" -o target/mmml/song.midi
 }

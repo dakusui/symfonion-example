@@ -5,7 +5,8 @@
   "$base": {
     "$notemaps": {},
     "$patterns": {
-    }
+    },
+    "$sequence": []
   },
   "$song": {
     "$notemaps": {},
@@ -14,7 +15,7 @@
   "$settings": {
     "$mididevice": "examples/jv"
   },
-  "$parts": "eval:object:$(compose_parts_section '.$song.$parts' '.$song.$devices')",
+  "$parts": "eval:object:$(compose_parts_section '.$song.$parts')",
   "$notemaps": "eval:object:$(ref '.$song.$notemaps')",
   "$grooves": "eval:object:$(ref '.$song.$grooves')",
   "$patterns": "eval:object:$(object_merge '.$song.$patterns' '.$base.$patterns')",

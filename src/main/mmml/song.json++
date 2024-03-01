@@ -5,11 +5,13 @@
   "$song": {
     "$devices": {
       "jv-1080": {
-        "$deviceType": "jv-10x0",
+        "$extends": [
+          "deviceTypes/jv-10x0.json"
+        ],
         "$voices": {
           "default:keyboard": "eval:object:$(voice_alias_of piano)",
           "default:guitar": "eval:object:$(voice_alias_of distortion)",
-          "default:bass": "eval:object:$(voice_alias_of electric-bass)",
+          "default:bass": "eval:object:$(voice_alias_of electric_bass)",
           "default:drums": "eval:object:$(voice_alias_of tekno-kit)",
           "piano": {
             "$sysex": [
@@ -74,7 +76,7 @@
               62
             ]
           },
-          "electric-bass": {
+          "electric_bass": {
             "$sysex": [
               "$jv-set-patchnum-pr-b",
               "$channel",
@@ -91,12 +93,14 @@
         }
       },
       "gervill": {
-        "$deviceType": "gm.json",
+        "$extends": [
+          "deviceTypes/gm.json"
+        ],
         "$voices": {
           "default:keyboard": "eval:object:$(voice_alias_of piano)",
-          "default:guitar": "eval:object:$(voice_alias_of overdrive)",
-          "default:bass": "eval:object:$(voice_alias_of electric-bass)",
-          "default:drums": "eval:object:$(voice_alias_of disco-kit)"
+          "default:guitar": "eval:object:$(voice_alias_of guitar)",
+          "default:bass": "eval:object:$(voice_alias_of bass)",
+          "default:drums": "eval:object:$(voice_alias_of percussive)"
         }
       }
     },
@@ -146,29 +150,119 @@
           "intro",
           "1"
         ],
-        "$patterns": {
+        "$parts": {
+          "$body": [],
+          "$length": 16,
           "part:keyboard": [
-            "eval:$(inline $(voice piano))",
-            "eval:$(inline $(stroke 'C;D;E;R;C;D;E;R;C;D;E;R;C;D;E;R;'))"
+            "eval:$(inline \"$(voice piano)\")",
+            "eval:$(inline \"$(stroke 'C;D;E;R;C;D;E;R;C;D;E;R;C;D;E;R;')\")"
           ],
           "part:guitar": [],
           "part:bass": [],
           "part:drums": []
-        }
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
       },
-      "...E": {
+      "verse-1": {
+        "$parts": {
+          "$body": [],
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "bridge-1": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "break-1": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "chorus-1": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "interlude-1": {
+        "$parts": {
+          "...F": []
+        },
+        "$beats": "4/4"
+      },
+      "verse-2": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "bridge-2": {
         "$patterns": {
           "...F": []
-        }
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "break-2": {
+        "$patterns": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "chorus-2": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "interlude-2": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
+      },
+      "chorus-3": {
+        "$parts": {
+          "...F": []
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
       },
       "outro": {
-        "$patterns": {
+        "$parts": {
           "...G": []
-        }
+        },
+        "$body": [],
+        "$length": 16,
+        "$beats": "4/4"
       }
     },
     "$sequence": [
-      "eval:object:$(bar intro)",
+      "eval:object:$(bar intro-1)",
       "eval:object:$(bar verse-1)",
       "eval:object:$(bar bridge-1)",
       "eval:object:$(bar break-1)",

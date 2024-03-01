@@ -1,0 +1,9 @@
+# A place holder for device type helper functions.
+
+function device_name() {
+  local _device_name
+  _device_name="$(cur)"
+  _device_name="${_device_name##*.}"
+
+  echo "${_device_name}" | sed -E 's/^"(.+)"$/\1/'
+}

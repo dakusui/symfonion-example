@@ -1,23 +1,39 @@
 # functions used inside song-base.json++
 
 function compose_parts_section() {
-  local _parts_path="${1}" _devices_path="${2}"
-  echo '{}'
+  local _parts_path="${1}"
+  local k r v var
+  var="$(ref "${_parts_path}")"
+  r='{}'
+  for k in $(echo "${var}"|jq '.|keys[]'); do
+    v="$(echo "$var"|jq ".${k}"|jq '.|{"$port":."$device"}*.')";
+    r="$(echo "${r}"|jq --argjson v "${v}" '.|{'"${k}"':$v}*.')";
+  done;
+  echo "${r}"
 }
 function voice() {
   local _voice_name="${1}"
   # shellcheck disable=SC2016
-  echo '{"$body": []}'
+  echo '{"$body": [
+        				{
+        					"$program": 0,
+        					"$bank": 0.0
+        				}
+        			]}'
+
 }
 
 function bar() {
   local _bar_name="${1}"
-  echo "{}"
+  local _p
+  # shellcheck disable=SC2016
+  _p='."$song"."$bars"'".${_bar_name}"
+  ref "${_p}"
 }
 
 function voice_alias_of() {
   local _voice_name="${1}"
-  echo "{}"
+  ref "$(cur)"."${_voice_name}"
 }
 
 function stroke() {
@@ -35,14 +51,17 @@ function object_merge() {
 }
 
 function array_append() {
-  echo "[]"
+  local _a="${1}" _b="${2}"
+  local _arr_a _arr_b
+  _arr_a="$(ref "${_a}")"
+  _arr_b="$(ref "${_b}")"
+  echo "${_arr_a}" | jq --argjson arr_b "${_arr_b}" '.|.+$arr_b'
 }
 
 function inline() {
-  local _inlined_node="${1}"
   # This is on purpose to compose '$inline:' value syntax of symfonion.
   # shellcheck disable=SC2016
-  printf '$inline:%s' "${_inlined_node}"
+  printf '$inline:%s' "${1}"
 }
 function message() {
   echo "${@}" >&2
@@ -52,3 +71,190 @@ function error() {
   message "${@}"
   exit 1
 }
+
+: <<"EXAMPLE"
+{
+  "$settings": {
+  },
+  "$parts": {
+    "test": {
+      "$channel": 0
+    }
+  },
+  "$patterns": {
+    "test1": {
+      "$body": [
+        {
+          "$notes": "C",
+          "$length": "2",
+          "$pan": 127,
+          "$program": 2
+        },
+        {
+          "$notes": "C",
+          "$length": "2",
+          "$pan": 0
+        }
+      ],
+      "$length": "8"
+    }
+  },
+  "$sequence": [
+    {
+      "$beats": "8/8",
+      "$patterns": {
+        "test": [
+          "test1"
+        ]
+      }
+    },
+    {
+      "$beats": "8/8",
+      "$patterns": {
+        "test": [
+          "test1"
+        ]
+      }
+    }
+  ]
+}
+EXAMPLE
+
+: <<"ASIS"
+  "$sequence": [
+    {
+      "$labels": [
+        "intro",
+        "1"
+      ],
+      "$patterns": {
+        "$body": [],
+        "$length": 16,
+        "part:keyboard": [
+          "$inline:{\"$body\": [ { \"$program\": 0, \"$bank\": 0.0 } ]}",
+          "$inline:{}"
+        ],
+        "part:guitar": [],
+        "part:bass": [],
+        "part:drums": []
+      },
+      "$body": [],
+      "$length": 16,
+      "$beats": "4/4"
+    }
+  ]
+ASIS
+
+: <<"TOBE"
+  "$sequence": [
+    {
+      "$labels": [
+        "intro",
+        "1"
+      ],
+      "$patterns": {
+        "$body": [],
+        "$length": 16,
+        "part:keyboard": [
+          "$inline:{\"$body\": [ { \"$program\": 0, \"$bank\": 0.0 } ]}",
+          "$inline:{}"
+        ],
+        "part:guitar": [],
+        "part:bass": [],
+        "part:drums": []
+      },
+      "$body": [],
+      "$length": 16,
+      "$beats": "4/4"
+    }
+  ]
+TOBE
+
+: <<K311
+
+    {
+        "$parts":{ "pianor": {"$channel":0} },
+        "$patterns":{
+            "01r":{
+                "$body":["r4","B","A","G#","A"],
+                "$length":16
+            },
+            "02r":{
+                "$body":["C>8","r8","D>","C>","B","C>", "E>8","r8","F>","E>","D#>","E>"],
+                "$length":16
+            },
+            "04r":{
+                "$body":["B>","A>","G#>","A>","B>","A>","G#>","A>", "C>>4","A>8","C>>8"],
+                "$length":16
+            },
+            "06r":{
+                "$body":[ "B>",  "F#A>", "EG>", "F#A>", "B>",  "F#A>", "EG>", "F#A>" ],
+                "$length":8, "$gate":0.3
+            },
+            "08r":{
+                "$body":["B>","F#A>","EG>","D#F#>", "E4", "r4" ],
+                "$length":8, "$gate":0.3
+            }
+        },
+        "$sequence":[
+            { "parts":{"pianor":["01r"]},   "$beats":"2/4" },
+            { "parts":{"pianor":["02r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["04r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["06r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["08r"]},   "$beats":"4/4" }
+        ]
+    }
+K311
+
+: <<K311TOBE
+
+    {
+        "$parts":{ "pianor": {"$channel":0} },
+        "$song": {
+          "$particles": {
+          },
+          "$bars": {
+            "$part:pianor": [
+              "$voice:piano"
+              "$notes:",
+            ],
+            "$beats": "2/4"
+          },
+          "$sequence": [
+          ]
+        },
+        "$patterns":{
+            "tone:piano": {
+                "$body":[{"$program":0, "$bank": 0.0}],
+                "$length":16
+            },
+            "01r": {
+                "$body":["r4;B;A;G#;A"],
+                "$length":16
+            },
+            "02r": {
+                "$body":["C>8;r8;D>;C>;B;C>;E>8;r8;F>;E>;D#>;E>"],
+                "$length":16
+            },
+            "04r": {
+                "$body":["B>;A>;G#>;A>;B>;A>;G#>;A>;C>>4;A>8;C>>8"],
+                "$length":16
+            },
+            "06r": {
+                "$body":[ "B>;F#A>;EG>;F#A>;B>;F#A>;EG>;F#A>" ],
+                "$length":8, "$gate":0.3
+            },
+            "08r": {
+                "$body":["B>;F#A>;EG>;D#F#>;E4;r4" ],
+                "$length":8, "$gate":0.3
+            }
+        },
+        "$sequence":[
+            { "parts":{"pianor":["01r"]},   "$beats":"2/4" },
+            { "parts":{"pianor":["02r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["04r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["06r"]},   "$beats":"4/4" },
+            { "parts":{"pianor":["08r"]},   "$beats":"4/4" }
+        ]
+    }
+K311TOBE
