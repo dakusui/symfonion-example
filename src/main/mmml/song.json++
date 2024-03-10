@@ -123,16 +123,29 @@
       }
     },
     "$patterns": {
-      "part:keyboard:program_change:piano": "eval:object:$(voice piano)",
-      "01r": {
-        "$body": [
-          "r4",
-          "B",
-          "A",
-          "G#",
-          "A"
-        ],
-        "$length": 16
+      "intro-1:piano": {
+
+      },
+      "intro-1:guitar": {
+
+      },
+      "intro-1:bass": {
+
+      },
+      "intro-1:drums": {
+
+      },
+      "intro-2:piano": {
+
+      },
+      "intro-2:guitar": {
+
+      },
+      "intro-2:bass": {
+
+      },
+      "intro-2:drums": {
+
       }
     },
     "$grooves": {
@@ -151,7 +164,7 @@
           "1"
         ],
         "$parts": {
-          "$body": [],
+          "$body": {},
           "$length": 16,
           "part:keyboard": [
             "eval:$(inline \"$(voice piano)\")",
@@ -176,9 +189,24 @@
       },
       "bridge-1": {
         "$parts": {
-          "...F": []
+          "piano": {
+
+          },
+          "guitar": {
+
+          },
+          "base": {
+
+          },
+          "drums": {
+            "$notes": "BHC;H;H;H;BSH;H;H;H;BHC;H;H;H;BSH;BHC;H;H;H;BSH;H;H;H;BHC;H;H;H;BSH;BHC;H;H;H;BSH;H;H;H;BHC;H;H;H;BSH;BHC;H;H;H;BSH;H;H;H;BHC;H;H;H;BSH;",
+            "$program": 127.0,
+            "$pan": [0,"..........",127]
+          }
         },
-        "$body": [],
+        "$body": {
+
+        },
         "$length": 16,
         "$beats": "4/4"
       },
@@ -200,6 +228,7 @@
       },
       "interlude-1": {
         "$parts": {
+        "$body": {
           "...F": []
         },
         "$beats": "4/4"
